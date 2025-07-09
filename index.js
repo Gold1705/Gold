@@ -388,8 +388,9 @@ async function getTrxRate() {
             return cachedTrxRateInfo.rate;
         }
 
-        console.error(chalk.red.bold('[TAUX DEBUG] L\'API a échoué et aucun cache n\'existe. Levée d\'une erreur fatale.'));
-        throw new Error("Service de taux de change indisponible et aucun cache récent.");
+        const fallbackRate = 80; // Un taux de secours raisonnable pour 1 USD = X FCFA -> 1 TRX = Y FCFA
+        console.warn(chalk.bgRed.white.bold(`[TAUX DEBUG] FATAL : L'API a échoué et aucun cache n'existe. Utilisation du taux de secours fixe : ${fallbackRate}`));
+        return fallbackRate;
     }
 }
 
