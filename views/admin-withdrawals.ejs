@@ -1,0 +1,52 @@
+<!-- Fichier : views/admin-withdrawals.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Demandes de Retrait</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-8">
+        <h1 class="text-3xl font-bold mb-6">Demandes de Retrait en Attente</h1>
+
+        <% if (withdrawals.length === 0) { %>
+            <p class="bg-blue-100 text-blue-800 p-4 rounded-lg">Aucune demande de retrait en attente pour le moment.</p>
+        <% } else { %>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <table class="min-w-full leading-normal">
+                    <thead>
+                        <tr>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Utilisateur</th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Montant</th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Adresse TRON</th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% withdrawals.forEach(w => { %>
+                            <tr id="withdrawal-row-<%= w.id %>">
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"><%= new Date(w.created_at).toLocaleString('fr-FR') %></td>
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"><%= w.username %></td>
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm font-bold"><%= w.amount_fcf.toLocaleString('fr-FR') %> FCFA</td>
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm font-mono break-all"><%= w.wallet_address %></td>
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
+                                    <form action="/admin/process-withdrawal" method="POST" class="inline-block">
+                                        <input type="hidden" name="withdrawalId" value="<%= w.id %>">
+                                        <button type="submit" name="action" value="approve" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Approuver</button>
+                                    </form>
+                                    <form action="/admin/process-withdrawal" method="POST" class="inline-block">
+                                        <input type="hidden" name="withdrawalId" value="<%= w.id %>">
+                                        <button type="submit" name="action" value="reject" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Rejeter</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>

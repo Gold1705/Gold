@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement Confirmé - GoldInvest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Votre bloc <style> est 100% conservé, car il est parfait. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* --- Animation de l'icône de validation --- */
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 2;
+            stroke-miterlimit: 10;
+            stroke: #4ade80; /* green-400 */
+            fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .checkmark {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 3;
+            stroke: #fff;
+            stroke-miterlimit: 10;
+            margin: 0 auto;
+            box-shadow: inset 0px 0px 0px #4ade80;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+        }
+
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+
+        @keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes scale {
+            0%, 100% {
+                transform: none;
+            }
+            50% {
+                transform: scale3d(1.1, 1.1, 1);
+            }
+        }
+
+        @keyframes fill {
+            100% {
+                box-shadow: inset 0px 0px 0px 60px #4ade80;
+            }
+        }
+
+        /* --- Animation de l'apparition des éléments --- */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        
+        /* Appliquer des délais différents pour un effet de cascade */
+        .delay-1 { animation-delay: 1.2s; }
+        .delay-2 { animation-delay: 1.4s; }
+        .delay-3 { animation-delay: 1.6s; }
+        .delay-4 { animation-delay: 1.8s; }
+
+    </style>
+</head>
+<body class="bg-gray-50 flex justify-center items-center min-h-screen p-4">
+
+  <!-- Votre structure de conteneur est 100% conservée -->
+  <div class="w-full max-w-2xl bg-white p-6 sm:p-10 md:p-12 rounded-2xl shadow-2xl text-center">
+
+    <!-- 1. L'ICÔNE ANIMÉE (inchangée) -->
+    <div class="mb-6">
+      <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+      </svg>
+    </div>
+
+    <!-- 2. LE MESSAGE PRINCIPAL (inchangé) -->
+    <div class="fade-in-up delay-1">
+        <h1 class="text-3xl sm:text-4xl font-black text-gray-800 mb-2">Félicitations !</h1>
+        <p class="text-lg text-gray-600">Votre investissement a été confirmé et est maintenant actif.</p>
+    </div>
+    
+    <!-- 3. LE RÉSUMÉ DE L'INVESTISSEMENT (DYNAMISÉ) -->
+    <div class="fade-in-up delay-2 my-8 bg-green-50/50 border border-green-200/60 p-6 rounded-xl text-left space-y-4">
+        <h2 class="text-lg font-bold text-gray-800 text-center mb-4">Résumé de l'investissement</h2>
+        
+        <!-- On vérifie si la variable 'investment' a été passée par le serveur -->
+        <% if (typeof investment !== 'undefined' && investment) { %>
+            <div class="flex justify-between items-center text-sm sm:text-base">
+                <span class="text-gray-500">Plan d'Investissement</span>
+                <span class="font-bold text-green-700">
+                    <%= investment.plan_name %>
+                </span>
+            </div>
+
+            <div class="flex justify-between items-center text-sm sm:text-base">
+                <span class="text-gray-500">Montant Investi</span>
+                <span class="font-bold text-gray-800">
+                    <%= parseFloat(investment.amount_invested_frs).toLocaleString('fr-FR') %> FCFA
+                </span>
+            </div>
+
+            <div class="flex justify-between items-center text-sm sm:text-base">
+                <span class="text-gray-500">Retour sur Investissement</span>
+                <span class="font-bold text-gray-800">
+                    <%= parseFloat(investment.expected_return_frs).toLocaleString('fr-FR') %> FCFA
+                </span>
+            </div>
+
+            <div class="flex justify-between items-center text-sm sm:text-base">
+                <span class="text-gray-500">ID de Transaction</span>
+                <a href="https://tronscan.org/#/transaction/<%= investment.transaction_hash %>" target="_blank" class="font-mono text-xs sm:text-sm bg-gray-200 px-2 py-1 rounded hover:bg-gray-300 transition-colors" title="Voir sur Tronscan">
+                    <%= investment.transaction_hash.substring(0, 8) %>...
+                </a>
+            </div>
+        <% } else { %>
+            <!-- Ce bloc s'affichera si les données ne sont pas disponibles, évitant un crash -->
+            <p class="text-center text-gray-500">Détails de l'investissement disponibles dans votre tableau de bord.</p>
+        <% } %>
+    </div>
+    
+    <!-- 4. PROCHAINES ÉTAPES (inchangé) -->
+    <div class="fade-in-up delay-3 text-left p-6 bg-gray-50/80 rounded-xl">
+        <h3 class="font-bold text-gray-800 mb-3 text-center">Prochaines étapes</h3>
+        <ul class="space-y-2 text-gray-600 text-sm">
+            <li class="flex items-start">
+                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span>Vous pouvez suivre la progression de vos investissements dans votre <strong>tableau de bord</strong>.</span>
+            </li>
+            <li class="flex items-start">
+                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                <span>Un <strong>email de confirmation</strong> (si configuré) vous sera envoyé avec les détails.</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 5. APPEL À L'ACTION (NAVIGATION) - MODIFIÉ COMME DEMANDÉ -->
+    <div class="fade-in-up delay-4 mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
+        <!-- Votre bouton "Tableau de bord" est conservé et pointe vers la page d'accueil -->
+        <a href="/" class="w-full sm:w-auto px-8 py-3 bg-green-600 text-white font-bold rounded-lg shadow-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 transition-all duration-300 transform hover:scale-105">
+            Accéder à mon tableau de bord
+        </a>
+        <!-- Le nouveau bouton est ajouté ici -->
+        <a href="/invest" class="w-full sm:w-auto px-8 py-3 text-gray-600 font-bold rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 transition-all duration-300">
+            Faire un autre investissement
+        </a>
+
+         <a href="/" class="w-full sm:w-auto px-8 py-3 text-gray-600 font-bold rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 transition-all duration-300">
+            Retour à l'acceuil
+        </a>
+        
+    </div>
+
+  </div>
+
+</body>
+</html>

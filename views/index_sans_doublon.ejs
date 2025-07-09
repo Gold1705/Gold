@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoldInvest</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 999; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .profile-modal { position: fixed; top: 0; right: 0; width: 100%; max-width: 480px; height: 100vh; background-color: #f3f4f6; box-shadow: -10px 0 30px rgba(0,0,0,0.2); z-index: 1000; transform: translateX(100%); transition: transform 0.4s ease-in-out; overflow-y: auto; }
+        .profile-modal.active { transform: translateX(0); }
+        .profile-modal-content { padding: 24px; }
+        .icon-btn { transition: all 0.2s ease; }
+        .icon-btn:hover { transform: scale(1.1); }
+    </style>
+</head>
+<body class="font-inter bg-gray-900">
+
+    <nav class="bg-transparent p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold text-white"><span class="text-yellow-400">Gold</span>Invest</div>
+            <div class="flex items-center space-x-8">
+                <a href="/" class="text-white hover:text-yellow-400">Accueil</a>
+                <a href="/invest" class="text-white hover:text-yellow-400">Investir</a>
+                <a href="/about" class="text-white hover:text-yellow-400">À propos</a>
+                <a href="/contact" class="text-white hover:text-yellow-400">Contact</a>
+                <% if (username) { %>
+                    <div class="flex items-center space-x-4">
+                        <button id="profile-btn" class="btn btn-gold"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>Profil</button>
+                        <a href="/logout" class="btn btn-gold">Déconnexion</a>
+                    </div>
+                <% } else { %>
+                    <div class="flex items-center space-x-4"><a href="/login" class="btn btn-gold">Connexion</a><a href="/register" class="btn btn-gold">Inscription</a></div>
+                <% } %>
+            </div>
+        </div>
+    </nav>
+
+    <% if (username) { %><div class="text-center mb-4"><h2 class="text-2xl font-bold text-yellow-400 hover:text-yellow-300 transition-colors duration-300 cursor-pointer welcome-header">Bienvenue, <%= username %></h2></div><% } %>
+
+    <div id="modal-overlay" class="modal-overlay">
+        <div id="profile-modal" class="profile-modal text-gray-800">
+            <div class="profile-modal-content">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center space-x-4">
+                        <div id="profile-picture-container" class="relative cursor-pointer group">
+                            <img id="modal-profile-img" src="/img/default-profile.png" alt="Photo de profil" class="w-16 h-16 rounded-full bg-gray-200 border-2 border-yellow-400 object-cover">
+                            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 flex items-center justify-center rounded-full transition-all duration-300">
+                                <svg class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            </div>
+                            <div id="profile-picture-options" class="hidden absolute top-full mt-2 w-48 bg-white rounded-md shadow-xl z-10 border">
+                                <button id="modify-photo-btn" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.536L16.732 3.732z"></path></svg>
+                                    <span>Modifier la photo</span>
+                                </button>
+                                <button id="view-photo-btn" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                    <span>Voir la photo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 modal-username"><%= username || "..." %></h3>
+                            <p class="text-gray-600 modal-email"><%= email || "..." %></p>
+                        </div>
+                    </div>
+                    <button id="close-modal-btn" class="text-gray-500 hover:text-gray-800 icon-btn"><svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
+                </div>
+                <form id="picture-update-form" class="hidden"><input type="file" name="profile_image" id="profile_image_input" accept="image/*"></form>
+                <div class="space-y-6">
+                    <div class="bg-white p-5 rounded-lg shadow-md border"><div class="flex items-center justify-between"><div><h2 class="text-lg font-semibold text-gray-700">Solde Principal</h2><p id="main-balance-display" class="text-3xl font-bold text-green-600 mt-1">0 FCFA</p></div><button id="withdraw-btn" class="bg-green-600 text-white font-bold py-3 px-5 rounded-md hover:bg-green-700 transition-colors flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed" disabled><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h2a1 1 0 100-2H9z" clip-rule="evenodd"></path></svg><span>Retirer</span></button></div><div id="withdraw-message" class="hidden mt-3 text-sm"></div></div>
+                    <div class="bg-white p-5 rounded-lg shadow-md border"><div id="profile-display-view"><div class="flex justify-between items-center mb-4"><h2 class="text-lg font-semibold text-gray-700">Mes Informations</h2><button id="edit-profile-btn" class="flex items-center space-x-2 text-sm text-blue-600 hover:text-blue-800 font-semibold"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.536L16.732 3.732z"></path></svg><span>Modifier</span></button></div><div class="space-y-3 text-sm"><p><strong class="font-semibold text-gray-800">Nom:</strong> <span id="display-username"></span></p><p><strong class="font-semibold text-gray-800">Email:</strong> <span id="display-email"></span></p><p><strong class="font-semibold text-gray-800">Adresse TRON:</strong> <span id="display-wallet" class="block break-all font-mono text-xs bg-gray-100 p-2 rounded mt-1"></span></p></div></div><div id="profile-edit-view" class="hidden"><h2 class="text-lg font-semibold mb-4 text-gray-700">Mettre à jour</h2><div id="profile-error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"></div><div id="profile-success" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4"></div><form id="profile-update-form" class="space-y-4"><div><label for="profile-username" class="block text-sm font-medium text-gray-700 mb-1">Nom d'utilisateur</label><input type="text" id="profile-username" name="username" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500" required></div><div><label for="profile-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label><input type="email" id="profile-email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500" required></div><div><label for="profile-wallet-address" class="block text-sm font-medium text-gray-700 mb-1">Adresse de retrait TRON</label><input type="text" id="profile-wallet-address" name="wallet_address" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500" required></div><div class="flex space-x-4"><button type="button" id="cancel-edit-btn" class="w-full bg-gray-200 text-gray-700 font-bold py-2.5 px-4 rounded-md hover:bg-gray-300">Annuler</button><button type="submit" class="w-full bg-yellow-500 text-white font-bold py-2.5 px-4 rounded-md hover:bg-yellow-600">Sauvegarder</button></div></form></div></div>
+                    <div class="bg-white p-5 rounded-lg shadow-md border"><h2 class="text-lg font-semibold text-gray-700 mb-4">Parrainage</h2><p class="text-sm text-gray-600 mb-2">Partagez votre lien pour gagner 500 FCFA pour chaque premier investissement de vos filleuls !</p><div class="flex items-center space-x-2 bg-gray-100 p-2 rounded-md"><input type="text" id="referral-link" class="flex-grow bg-transparent border-none text-sm text-gray-800 focus:ring-0" readonly><button id="copy-referral-btn" class="flex-shrink-0 bg-yellow-500 text-white p-2 rounded-md hover:bg-yellow-600"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M7 9a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9z"></path><path d="M4 3a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H4z"></path></svg></button></div><p id="copy-success-msg" class="text-xs text-green-600 mt-1 hidden">Lien copié !</p></div>
+                    <div class="bg-white p-5 rounded-lg shadow-md border"><h4 class="font-semibold text-gray-700 mb-4">Notifications</h4><div id="notifications-list" class="space-y-3 max-h-48 overflow-y-auto"></div></div>
+                    <div class="bg-white p-5 rounded-lg shadow-md border"><h4 class="font-semibold text-gray-700 mb-4">Mes Investissements</h4><div id="investments-list" class="space-y-4 max-h-64 overflow-y-auto"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                    Investissez dans l'Or du Futur
+                </h1>
+                <p class="text-xl mb-8">
+                    Découvrez une nouvelle façon d'investir avec la technologie blockchain. 
+                    Des rendements élevés avec des paiements sécurisés via TRON.
+                </p>
+                <% if (!username) { %>
+                    <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+                        <a href="/register" class="btn btn-gold">Commencer maintenant</a>
+                        <a href="#features" class="btn btn-outline text-white border-white">En savoir plus</a>
+                    </div>
+                <% } else { %>
+                    <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+                        <a href="/invest" class="btn btn-gold">Investir maintenant</a>
+                        <a href="/investments" class="btn btn-outline text-white border-white">Voir mes investissements</a>
+                    </div>
+                <% } %>
+            </div>
+            <div class="scene float">
+                <div class="cube">
+                    <div class="front"></div>
+                    <div class="back"></div>
+                    <div class="right"></div>
+                    <div class="left"></div>
+                    <div class="top"></div>
+                    <div class="bottom"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features glass">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12">Pourquoi nous choisir ?</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="feature-card">
+                    <h3 class="text-2xl font-bold mb-4">Sécurité Maximale</h3>
+                    <p>Transactions sécurisées via la blockchain TRON</p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="text-2xl font-bold mb-4">Rendements Élevés</h3>
+                    <p>Des rendements compétitifs avec des paiements réguliers</p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="text-2xl font-bold mb-4">Support 24/7</h3>
+                    <p>Assistance client disponible 24h/24 et 7j/7</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats glass">
+        <div class="container mx-auto">
+            <div class="stats">
+                <div class="stat-card">
+                    <h3 class="text-3xl font-bold mb-2">1000+</h3>
+                    <p class="text-gray-400">Investisseurs satisfaits</p>
+                </div>
+                <div class="stat-card">
+                    <h3 class="text-3xl font-bold mb-2">5000+</h3>
+                    <p class="text-gray-400">Transactions sécurisées</p>
+                </div>
+                <div class="stat-card">
+                    <h3 class="text-3xl font-bold mb-2">10M+</h3>
+                    <p class="text-gray-400">TRX investis</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-white">
+        <div class="content-wrapper">
+            <div class="grid md:grid-cols-2 gap-8 py-12">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">GoldInvest</h3>
+                    <p class="text-gray-400">2024 - Tous droits réservés</p>
+                </div>
+                <div class="flex flex-col space-y-4">
+                    <a href="/" class="hover:text-yellow-400 transition-colors duration-300">Accueil</a>
+                    <a href="/about" class="hover:text-yellow-400 transition-colors duration-300">À propos</a>
+                    <a href="/contact" class="hover:text-yellow-400 transition-colors duration-300">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="lightbox-modal" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-[1001]">
+        <img id="lightbox-image" src="" alt="Photo de profil en grand" class="max-w-[90vw] max-h-[90vh] rounded-lg">
+        <button id="lightbox-close-btn" class="absolute top-4 right-4 text-white text-4xl font-bold hover:text-gray-300">×</button>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- 1. SÉLECTION DE TOUS LES ÉLÉMENTS DU DOM ---
+    const elements = {
+        // Actions principales
+        profileBtn: document.getElementById('profile-btn'),
+        closeModalBtn: document.getElementById('close-modal-btn'),
+        editProfileBtn: document.getElementById('edit-profile-btn'),
+        cancelEditBtn: document.getElementById('cancel-edit-btn'),
+        withdrawBtn: document.getElementById('withdraw-btn'),
+        copyReferralBtn: document.getElementById('copy-referral-btn'),
+
+        // Modal & Vues
+        modalOverlay: document.getElementById('modal-overlay'),
+        modal: document.getElementById('profile-modal'),
+        profileDisplayView: document.getElementById('profile-display-view'),
+        profileEditView: document.getElementById('profile-edit-view'),
+        
+        // Formulaires
+        profileUpdateForm: document.getElementById('profile-update-form'),
+        pictureUpdateForm: document.getElementById('picture-update-form'),
+        profileImageInput: document.getElementById('profile_image_input'),
+
+        // Affichage des données
+        mainBalanceDisplay: document.getElementById('main-balance-display'),
+        investmentsList: document.getElementById('investments-list'),
+        notificationsList: document.getElementById('notifications-list'),
+        displayUsername: document.getElementById('display-username'),
+        displayEmail: document.getElementById('display-email'),
+        displayWallet: document.getElementById('display-wallet'),
+        referralLinkInput: document.getElementById('referral-link'),
+        
+        // Messages (Erreur, Succès)
+        profileErrorDiv: document.getElementById('profile-error'),
+        profileSuccessDiv: document.getElementById('profile-success'),
+        withdrawMessage: document.getElementById('withdraw-message'),
+        copySuccessMsg: document.getElementById('copy-success-msg'),
+
+        // Photo de profil & Lightbox
+        profilePictureContainer: document.getElementById('profile-picture-container'),
+        profilePictureOptions: document.getElementById('profile-picture-options'),
+        modifyPhotoBtn: document.getElementById('modify-photo-btn'),
+        viewPhotoBtn: document.getElementById('view-photo-btn'),
+        modalProfileImg: document.getElementById('modal-profile-img'),
+        lightbox: {
+            modal: document.getElementById('lightbox-modal'),
+            image: document.getElementById('lightbox-image'),
+            closeBtn: document.getElementById('lightbox-close-btn')
+        }
+    };
+
+    // --- 2. GESTION DU MODAL PRINCIPAL ---
+    const openModal = () => {
+        elements.modalOverlay.classList.add('active');
+        elements.modal.classList.add('active');
+        loadAllData();
+    };
+    const closeModal = () => {
+        elements.modalOverlay.classList.remove('active');
+        elements.modal.classList.remove('active');
+        switchToDisplayView();
+    };
+    elements.profileBtn?.addEventListener('click', openModal);
+    elements.closeModalBtn?.addEventListener('click', closeModal);
+    elements.modalOverlay?.addEventListener('click', e => { if (e.target === elements.modalOverlay) closeModal(); });
+
+    // --- 3. GESTION DES VUES (Affichage / Édition du profil) ---
+    const switchToEditView = () => {
+        elements.profileDisplayView.classList.add('hidden');
+        elements.profileEditView.classList.remove('hidden');
+    };
+    const switchToDisplayView = () => {
+        elements.profileDisplayView.classList.remove('hidden');
+        elements.profileEditView.classList.add('hidden');
+        elements.profileErrorDiv.classList.add('hidden');
+        elements.profileSuccessDiv.classList.add('hidden');
+    };
+    elements.editProfileBtn?.addEventListener('click', switchToEditView);
+    elements.cancelEditBtn?.addEventListener('click', switchToDisplayView);
+
+    // --- 4. GESTION DE LA PHOTO DE PROFIL ---
+    elements.profilePictureContainer?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        elements.profilePictureOptions.classList.toggle('hidden');
+    });
+    document.addEventListener('click', () => {
+        if(elements.profilePictureOptions) elements.profilePictureOptions.classList.add('hidden');
+    });
+    elements.modifyPhotoBtn?.addEventListener('click', () => {
+        elements.profileImageInput.click();
+    });
+    elements.viewPhotoBtn?.addEventListener('click', () => {
+        if(elements.lightbox.image && elements.lightbox.modal) {
+            elements.lightbox.image.src = elements.modalProfileImg.src;
+            elements.lightbox.modal.classList.remove('hidden');
+        }
+    });
+    elements.lightbox.closeBtn?.addEventListener('click', () => elements.lightbox.modal.classList.add('hidden'));
+    elements.lightbox.modal?.addEventListener('click', e => { if (e.target === elements.lightbox.modal) elements.lightbox.modal.classList.add('hidden'); });
+    elements.profileImageInput?.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const formData = new FormData();
+        formData.append('profile_image', file);
+        try {
+            const result = await fetchAPI('/update-profile-picture', { method: 'POST', body: formData });
+            if (result.success) {
+                elements.modalProfileImg.src = result.newImageUrl + `?t=${new Date().getTime()}`;
+                alert('Photo de profil mise à jour !');
+            } else {
+                alert(result.error || 'Erreur lors de la mise à jour.');
+            }
+        } catch (error) {
+            alert(error.message || 'Erreur lors de l\'envoi de l\'image.');
+        }
+    });
+
+    // --- 5. FONCTIONS DE CHARGEMENT DES DONNÉES (API) ---
+    async function fetchAPI(url, options = {}) {
+        try {
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ error: `Erreur HTTP: ${response.statusText}` }));
+                throw new Error(errorData.error || `Erreur réseau: ${response.status}`);
+            }
+            return await response.json();
+        } catch (error) {
+            console.error(`Erreur FETCH pour ${url}:`, error);
+            throw error;
+        }
+    }
+
+    function loadAllData() {
+        if (!elements.profileBtn) return; // Ne charge pas les données si l'utilisateur n'est pas connecté
+        loadProfileDataAndBalance();
+        loadInvestments();
+        loadNotifications();
+    }
+
+    async function loadProfileDataAndBalance() {
+        try {
+            await fetchAPI('/process-payouts', { method: 'POST' });
+            const data = await fetchAPI('/profile-data');
+            if (data.success) {
+                const { username, email, wallet_address, balance_fcf, profile_image_url, referral_code } = data.user;
+                document.querySelectorAll('.modal-username').forEach(el => el.textContent = username || 'Non défini');
+                document.querySelectorAll('.modal-email').forEach(el => el.textContent = email || 'Non défini');
+                elements.displayUsername.textContent = username || 'Non défini';
+                elements.displayEmail.textContent = email || 'Non défini';
+                elements.displayWallet.textContent = wallet_address || 'Aucune adresse enregistrée';
+                elements.profileUpdateForm.querySelector('#profile-username').value = username || '';
+                elements.profileUpdateForm.querySelector('#profile-email').value = email || '';
+                elements.profileUpdateForm.querySelector('#profile-wallet-address').value = wallet_address || '';
+                elements.modalProfileImg.src = profile_image_url || '/img/default-profile.png';
+                const mainBalance = parseFloat(balance_fcf) || 0;
+                elements.mainBalanceDisplay.textContent = `${mainBalance.toLocaleString('fr-FR')} FCFA`;
+                elements.withdrawBtn.disabled = mainBalance <= 0;
+                elements.referralLinkInput.value = `${window.location.origin}/register?ref=${referral_code}`;
+            }
+        } catch (error) {
+            elements.mainBalanceDisplay.textContent = 'Erreur';
+        }
+    }
+
+    async function loadInvestments() {
+        try {
+            const data = await fetchAPI('/user-investments');
+            elements.investmentsList.innerHTML = '';
+            if (data.success && data.investments.length > 0) {
+                data.investments.forEach(inv => {
+                    const div = document.createElement('div');
+                    div.className = 'p-4 bg-white border rounded-lg shadow-sm space-y-3';
+                    const payoutDate = new Date(inv.payout_date);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    const diffTime = payoutDate.getTime() - today.getTime();
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    let statusHTML = '';
+                    if (inv.status === 'pending') {
+                        statusHTML = `<div class="text-sm font-bold uppercase px-3 py-1.5 rounded-full bg-yellow-100 text-yellow-800">En attente de Paiement</div>`;
+                    } else if (inv.status === 'paid_out') {
+                        statusHTML = `<div class="text-sm font-bold uppercase px-3 py-1.5 rounded-full bg-gray-200 text-gray-600">Gains Retirés</div>`;
+                    } else if (inv.status === 'completed') {
+                        statusHTML = `<div class="text-sm font-bold uppercase px-3 py-1.5 rounded-full bg-green-100 text-green-800">Gains Disponibles</div>`;
+                    } else if (inv.status === 'active') {
+                        if (diffDays > 1) {
+                            statusHTML = `<div class="text-sm font-bold uppercase px-3 py-1.5 rounded-full bg-blue-100 text-blue-800">Paiement dans ${diffDays} jours</div>`;
+                        } else if (diffDays === 1) {
+                            statusHTML = `<div class="text-sm font-bold uppercase px-3 py-1.5 rounded-full bg-blue-100 text-blue-800">Paiement Demain</div>`;
+                        } else {
+                            statusHTML = `<div class="text-sm font-bold uppercase px-3 py-1.5 rounded-full bg-blue-100 text-blue-800">Paiement Aujourd'hui</div>`;
+                        }
+                    }
+                    div.innerHTML = `<div><div class="flex justify-between items-center mb-2"><h3 class="font-bold text-gray-800">${inv.plan_name || `Investissement #${inv.id}`}</h3><p class="text-xs text-gray-500">${new Date(inv.date_invested).toLocaleDateString('fr-FR')}</p></div><div class="flex justify-between items-end text-sm text-gray-600"><span>Investi: <strong class="text-gray-800">${parseFloat(inv.amount_invested_frs).toLocaleString('fr-FR')} FCFA</strong></span><span>Retour Attendu: <strong class="text-gray-800">${parseFloat(inv.expected_return_frs).toLocaleString('fr-FR')} FCFA</strong></span></div></div><div class="text-center pt-2 border-t">${statusHTML}</div>`;
+                    elements.investmentsList.appendChild(div);
+                });
+            } else {
+                elements.investmentsList.innerHTML = '<p class="text-sm text-gray-500 text-center p-4">Aucun investissement pour le moment.</p>';
+            }
+        } catch (error) {
+            elements.investmentsList.innerHTML = '<p class="text-sm text-red-500 text-center p-4">Erreur de chargement des investissements.</p>';
+            console.error('Erreur dans la fonction loadInvestments:', error);
+        }
+    }
+
+    async function loadNotifications() {
+        const getNotificationDetails = (type) => {
+            const icons = { success: '<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>', welcome: '<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>', info: '<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>', error: '<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>', default: '<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>' };
+            const colors = { success: 'bg-green-500', welcome: 'bg-indigo-500', info: 'bg-blue-500', error: 'bg-red-500', default: 'bg-gray-400' };
+            return { icon: icons[type] || icons.default, bgColor: colors[type] || colors.default };
+        };
+        try {
+            const data = await fetchAPI('/notifications');
+            elements.notificationsList.innerHTML = '';
+            if (data.success && data.notifications.length > 0) {
+                data.notifications.forEach(notif => {
+                    const details = getNotificationDetails(notif.type);
+                    const isReadClass = notif.is_read ? 'bg-white' : 'bg-yellow-50 border-l-4 border-yellow-400';
+                    const div = document.createElement('div');
+                    div.id = `notification-${notif.id}`;
+                    div.className = `flex items-start space-x-4 p-3 rounded-lg shadow-sm transition-all duration-300 ${isReadClass}`;
+                    div.innerHTML = `<div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${details.bgColor}">${details.icon}</div><div class="flex-grow"><p class="text-sm text-gray-800">${notif.message}</p><p class="text-xs text-gray-500 mt-1">${new Date(notif.created_at).toLocaleString('fr-FR')}</p></div><button class="delete-notification-btn flex-shrink-0 text-gray-400 hover:text-red-500" data-id="${notif.id}"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>`;
+                    elements.notificationsList.appendChild(div);
+                });
+                document.querySelectorAll('.delete-notification-btn').forEach(button => {
+                    button.addEventListener('click', (e) => deleteNotification(e.currentTarget.dataset.id));
+                });
+            } else {
+                elements.notificationsList.innerHTML = '<p class="text-sm text-center text-gray-500 p-4">Aucune notification.</p>';
+            }
+        } catch (error) {
+            elements.notificationsList.innerHTML = '<p class="text-sm text-red-500 text-center p-4">Erreur de chargement.</p>';
+        }
+    }
+    
+    async function deleteNotification(id) {
+        try {
+            const result = await fetchAPI(`/notifications/${id}`, { method: 'DELETE' });
+            if (result.success) {
+                const notifElement = document.getElementById(`notification-${id}`);
+                if (notifElement) {
+                    notifElement.style.transition = 'opacity 0.5s, transform 0.5s';
+                    notifElement.style.opacity = '0';
+                    notifElement.style.transform = 'translateX(100%)';
+                    setTimeout(() => {
+                        notifElement.remove();
+                        if (elements.notificationsList.children.length === 0) {
+                           elements.notificationsList.innerHTML = '<p class="text-sm text-center text-gray-500 p-4">Aucune notification.</p>';
+                        }
+                    }, 500);
+                }
+            } else { alert(result.error || "Impossible de supprimer."); }
+        } catch (error) { console.error('Erreur suppression notification:', error); }
+    }
+
+    // --- 6. GESTION DES ACTIONS (Formulaires, Boutons) ---
+    elements.profileUpdateForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        [elements.profileErrorDiv, elements.profileSuccessDiv].forEach(el => el.classList.add('hidden'));
+        try {
+            const data = Object.fromEntries(new FormData(e.target).entries());
+            const result = await fetchAPI('/update-profile', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+            if (result.success) {
+                elements.profileSuccessDiv.textContent = result.message;
+                elements.profileSuccessDiv.classList.remove('hidden');
+                await loadProfileDataAndBalance();
+                setTimeout(switchToDisplayView, 1500);
+            } else {
+                elements.profileErrorDiv.textContent = result.error;
+                elements.profileErrorDiv.classList.remove('hidden');
+            }
+        } catch (error) {
+            elements.profileErrorDiv.textContent = error.message || 'Erreur réseau.';
+            elements.profileErrorDiv.classList.remove('hidden');
+        }
+    });
+
+    elements.withdrawBtn?.addEventListener('click', async () => {
+        if (!confirm("Voulez-vous vraiment lancer le retrait de votre solde principal ?")) return;
+        elements.withdrawBtn.disabled = true;
+        elements.withdrawMessage.textContent = 'Traitement...';
+        elements.withdrawMessage.className = 'mt-3 text-sm block text-blue-600';
+        try {
+            const result = await fetchAPI('/request-withdrawal', { method: 'POST' });
+            elements.withdrawMessage.textContent = result.message || result.error;
+            elements.withdrawMessage.className = `mt-3 text-sm block ${result.success ? 'text-green-600' : 'text-red-500'}`;
+            if(result.success) loadAllData(); else elements.withdrawBtn.disabled = false;
+        } catch(e) {
+            elements.withdrawMessage.textContent = e.message || "Erreur réseau.";
+            elements.withdrawMessage.className = 'mt-3 text-sm block text-red-500';
+            elements.withdrawBtn.disabled = false;
+        }
+    });
+    
+    elements.copyReferralBtn?.addEventListener('click', () => {
+        elements.referralLinkInput.select();
+        navigator.clipboard.writeText(elements.referralLinkInput.value).then(() => {
+            elements.copySuccessMsg.classList.remove('hidden');
+            setTimeout(() => elements.copySuccessMsg.classList.add('hidden'), 2000);
+        }).catch(err => {
+            console.error('Erreur copie:', err);
+            alert('Impossible de copier.');
+        });
+    });
+
+    // --- 7. TÂCHES DE FOND (Intégration de la logique de l'ancien script) ---
+    if (elements.profileBtn) { // N'exécute que si l'utilisateur est connecté
+        // Vérifier périodiquement les paiements et mettre à jour l'interface si nécessaire.
+        setInterval(async () => {
+            try {
+                // Cette route doit exister sur votre serveur et retourner { updates: [...] } ou { updates: [] }
+                const data = await fetchAPI('/check-payments'); 
+                if (data.updates && data.updates.length > 0) {
+                    // S'il y a des mises à jour, recharger les sections concernées.
+                    console.log('Mises à jour détectées, rechargement des données...');
+                    loadInvestments();
+                    loadNotifications();
+                    // On pourrait aussi recharger le solde si les paiements l'affectent directement
+                    // loadProfileDataAndBalance(); 
+                }
+            } catch (error) {
+                console.error('Erreur lors de la vérification périodique des paiements:', error);
+            }
+        }, 30000); // Toutes les 30 secondes
+    }
+});
+</script>
+</body>
+</html>
+
+
+Je vais t'expliquer le principe pour le retrait le le solde je
+ pense que là maintenant si une personne utilise mon lien pour payer 
+ j'aurai un bonus donc le bonus doit s'imcrémenter à chaque
+  fois que quelqu'un utilise mon lien pour payer.Du coup je dois être en mesure d'afficher son solde.Après 
+  La personne peut lancer de retrait maintenant si il lance de retrait il faut que quelqu'un 
+  soit notifier pour lui faire le virement par crypto(tron) et on lui dira pendant ce temps que sa demande est en
+   cours de traitement.Maintenant si il reçoit les sous il faut que le système ou
+   l'application lui notifie qu'il a payé et la mise à jour doit se faire dans son solde.Si le solde est 0FCFA on lui
+    dit solde insuffisant.Maintenant l'utilisateur a
+     le droit de faire un retrait maximum de 2500FCFA par jour.Il aura des notifications dynamique comme
+      s'affiche les autres notifications des autres fonctionnalités ou sevices de mon sites
+     Quand il dépasse 2500 il n'est plus illigible et ça fait au
+      lendemain.Du coup analyse celà et propose moi en fonction des fichier que je t'ai fais analysé
+      comment nous allons procéder concrètement pour ne pas avoir d'erreur

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rejoignez GoldInvest & Gagnez de l'Argent</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Vos styles sont 100% conservés */
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .page-container {
+            display: flex; align-items: center; justify-content: center; min-height: 100vh;
+            padding: 1rem; background-color: #111827;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(251, 191, 36, 0.1), transparent 35%),
+                radial-gradient(circle at 85% 80%, rgba(59, 130, 246, 0.08), transparent 35%);
+        }
+        .content-card {
+            display: grid; grid-template-columns: 1fr; width: 100%; max-width: 960px;
+            background: white; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden; animation: pop-in 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+        @media (min-width: 1024px) { .content-card { grid-template-columns: 1fr 1.1fr; } }
+        @keyframes pop-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .marketing-column {
+            background: linear-gradient(145deg, #1f2937 0%, #111827 100%); color: white;
+            padding: 2.5rem; display: flex; flex-direction: column; justify-content: center;
+        }
+        .benefit-item { animation: slide-up 0.6s ease-out forwards; opacity: 0; }
+        @keyframes slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .form-column { padding: 2.5rem; }
+        .input-group { position: relative; margin-bottom: 1.75rem; }
+        .input-group input {
+            width: 100%; padding: 0.875rem 1rem; border: 2px solid #d1d5db;
+            border-radius: 0.5rem; font-size: 1rem; transition: border-color 0.2s ease;
+        }
+        .input-group label {
+            position: absolute; top: 50%; left: 1rem; transform: translateY(-50%);
+            color: #6b7280; background-color: white; padding: 0 0.25rem;
+            transition: all 0.2s ease-out; pointer-events: none;
+        }
+        .input-group input:focus { outline: none; border-color: #f59e0b; }
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label { top: 0; font-size: 0.75rem; color: #d97706; }
+        .submit-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            transition: all 0.3s ease;
+        }
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 7px 20px rgba(245, 158, 11, 0.4); }
+        .error-message {
+            background-color: #fef2f2; border-left: 4px solid #ef4444;
+            color: #b91c1c; padding: 1rem; margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="content-card">
+            
+            <!-- COLONNE GAUCHE : MARKETING & BÉNÉFICES -->
+            <div class="marketing-column hidden lg:flex">
+                <div>
+                    <!-- L'AJOUT EST ICI -->
+                    <a href="/" class="text-3xl font-black text-white mb-8 inline-block benefit-item" style="animation-delay: 0.1s;">
+                        <span class="text-yellow-400">Gold</span>Invest
+                    </a>
+                    
+                    <h1 class="text-4xl font-black mb-4 text-white benefit-item" style="animation-delay: 0.2s;">
+                        Commencez à Gagner. <span class="text-yellow-400">Aujourd'hui.</span>
+                    </h1>
+                    <p class="mb-8 text-gray-300 benefit-item" style="animation-delay: 0.3s;">
+                        Rejoignez une communauté d'investisseurs et débloquez votre potentiel de gains dès le premier jour.
+                    </p>
+                    
+                    <ul class="space-y-5">
+                        <li class="flex items-start benefit-item" style="animation-delay: 0.4s;">
+                            <svg class="w-7 h-7 text-green-400 mr-4 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01M12 6v-1m0-1V4m0 2.01V8m0 0h.01M12 15h.01M12 17h.01M9 17h.01M15 17h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div>
+                                <strong class="block text-white">Gagnez 1000 FCFA par Ami</strong>
+                                <span class="text-gray-400">Recevez un bonus réel et retirable pour chaque nouvel investisseur que vous invitez.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start benefit-item" style="animation-delay: 0.5s;">
+                             <svg class="w-7 h-7 text-green-400 mr-4 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                            <div>
+                                <strong class="block text-white">Investissements à Haut Rendement</strong>
+                                <span class="text-gray-400">Accédez à des plans d'investissement conçus pour une croissance rapide et sécurisée.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start benefit-item" style="animation-delay: 0.6s;">
+                            <svg class="w-7 h-7 text-green-400 mr-4 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div>
+                                <strong class="block text-white">Retraits Sécurisés en TRX</strong>
+                                <span class="text-gray-400">Votre argent, votre contrôle. Transférez vos gains vers votre portefeuille personnel.</span>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="mt-10 text-center benefit-item" style="animation-delay: 0.7s;">
+                         <a href="/referral" class="text-yellow-400 hover:underline font-semibold">Voir comment fonctionne le parrainage →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLONNE DROITE : FORMULAIRE D'INSCRIPTION -->
+            <div class="form-column">
+                <div class="text-center mb-8">
+                   
+    
+                     <a href="/" class="text-3xl font-black text-black mb-8 inline-block benefit-item" style="animation-delay: 0.1s;">
+                        <span class="text-yellow-400">Gold</span>Invest
+                    </a>
+                    <h2 class="text-3xl font-bold text-gray-800">Créez Votre Compte</h2>
+                    <p class="text-gray-500 mt-2">C'est rapide, simple et gratuit.</p>
+                </div>
+                
+                <% if (error) { %>
+                    <div class="error-message" role="alert">
+                        <p class="font-bold">Erreur :</p>
+                        <p><%= error %></p>
+                    </div>
+                <% } %>
+                
+                <form action="/register" method="POST">
+                    <div class="input-group">
+                        <input type="text" id="username" name="username" placeholder=" " required>
+                        <label for="username">Nom d'utilisateur</label>
+                    </div>
+                     <div class="input-group">
+                        <input type="email" id="email" name="email" placeholder=" " required>
+                        <label for="email">Adresse e-mail</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="password" name="password" placeholder=" " required>
+                        <label for="password">Mot de passe</label>
+                    </div>
+                     <!-- Le code de parrainage est bien un champ caché, comme vous le vouliez -->
+                     <input type="hidden" name="refCode" value="<%= refCode || '' %>">
+
+                    <button type="submit" class="w-full text-lg font-bold py-3 px-4 rounded-lg submit-btn">
+                        Créer mon Compte et Activer mes Gains
+                    </button>
+                </form>
+
+                <p class="mt-8 text-center text-sm text-gray-600">
+                    Déjà un compte ? 
+                    <a href="/login" class="font-bold text-yellow-600 hover:text-yellow-500">
+                        Se connecter
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

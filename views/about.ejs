@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À propos de GoldInvest</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        /* Styles cohérents avec index.ejs */
+        .hero {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 4rem 0;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 4rem 0;
+        }
+
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .section-title {
+            color: #1e293b;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border-color: #d1d5db;
+        }
+
+        .number-circle {
+            width: 60px;
+            height: 60px;
+            background: #f59e0b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        .gold-image {
+            background-image: url('/assets/img/gold_invest.jpeg');
+            background-size: cover;
+            background-position: center;
+            height: 300px;
+            border-radius: 1rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        footer {
+            background: #1e293b;
+            color: white;
+            padding: 3rem 0;
+        }
+
+        footer a {
+            color: white;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #f59e0b;
+        }
+
+        /* Amélioration de la lisibilité du texte */
+        .glass p {
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .glass h2 {
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+        }
+
+        .glass h3 {
+            color: #1e293b;
+            margin-bottom: 0.75rem;
+        }
+
+        .glass .text-gray-600 {
+            color: #4b5563;
+        }
+
+        .glass .text-gray-700 {
+            color: #374151;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 3rem 0;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .feature-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-gray-50">
+    <nav class="bg-transparent p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold text-white">
+                <span class="text-yellow-400">Gold</span>Invest
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="/" class="text-white hover:text-yellow-400">Accueil</a>
+                <a href="/contact" class="text-white hover:text-yellow-400">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="content-wrapper text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                À propos de GoldInvest
+            </h1>
+            <p class="text-xl mb-8">
+                Découvrez notre plateforme d'investissement moderne et sécurisée
+            </p>
+        </div>
+    </section>
+
+    <section class="glass">
+        <div class="content-wrapper">
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <h2 class="section-title">Notre Mission</h2>
+                    <p class="mb-6 text-gray-700">
+                        Chez GoldInvest, notre mission est de démocratiser l'investissement 
+                        dans l'or numérique en offrant une plateforme sécurisée et intuitive.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="feature-card">
+                            <div class="number-circle">1</div>
+                            <h3 class="text-xl font-bold mb-3">Sécurité</h3>
+                            <p class="text-gray-600">Transactions sécurisées via la blockchain TRON</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="number-circle">2</div>
+                            <h3 class="text-xl font-bold mb-3">Transparence</h3>
+                            <p class="text-gray-600">Un suivi en temps réel de vos investissements</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="number-circle">3</div>
+                            <h3 class="text-xl font-bold mb-3">Simplicité</h3>
+                            <p class="text-gray-600">Interface utilisateur intuitive et accessible</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="section-title">Notre Histoire</h2>
+                    <p class="mb-6 text-gray-700">
+                        Fondée en 2025, GoldInvest a été créée par des experts en finance 
+                        et en technologie blockchain. Notre objectif est de révolutionner 
+                        l'industrie de l'investissement en rendant l'or numérique accessible 
+                        à tous.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="feature-card">
+                            <div class="number-circle">2025</div>
+                            <h3 class="text-xl font-bold mb-3">Lancement</h3>
+                            <p class="text-gray-600">Lancement officiel de la plateforme</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="number-circle">Q2</div>
+                            <h3 class="text-xl font-bold mb-3">Expansion</h3>
+                            <p class="text-gray-600">Extension de nos services à l'international</p>
+                        <div class="flex items-start space-x-4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-transparent text-white py-8">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div>
+                    <h3 class="text-xl font-bold">GoldInvest</h3>
+                    <p class="text-gray-400"> 2025 GoldInvest. Tous droits réservés.</p>
+                </div>
+                <div class="flex space-x-4 mt-4 md:mt-0">
+                    <a href="/" class="text-gray-400 hover:text-white">Accueil</a>
+                    <a href="/contact" class="text-gray-400 hover:text-white">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

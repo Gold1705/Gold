@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Accédez à Votre Compte GoldInvest</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Les styles sont identiques à la page register pour une expérience cohérente */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        
+        .page-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+            background-color: #111827;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(251, 191, 36, 0.1), transparent 35%),
+                radial-gradient(circle at 85% 80%, rgba(59, 130, 246, 0.08), transparent 35%);
+        }
+
+        .content-card {
+            display: grid;
+            grid-template-columns: 1fr;
+            width: 100%;
+            max-width: 960px;
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            animation: pop-in 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+
+        @media (min-width: 1024px) {
+            .content-card {
+                grid-template-columns: 1.1fr 1fr; /* Ordre inversé : formulaire à gauche, marketing à droite */
+            }
+        }
+
+        @keyframes pop-in {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .marketing-column {
+            background: linear-gradient(145deg, #1f2937 0%, #111827 100%);
+            color: white;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            order: 2; /* S'affiche en deuxième sur mobile */
+        }
+        
+        @media (min-width: 1024px) {
+            .marketing-column { order: 1; } /* Reprend sa place à droite sur grand écran */
+        }
+
+        .benefit-item {
+            animation: slide-up 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-column {
+            padding: 2.5rem;
+            order: 1; /* Le formulaire s'affiche en premier sur mobile */
+        }
+
+        @media (min-width: 1024px) {
+            .form-column { order: 0; }
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.75rem;
+        }
+
+        .input-group input {
+            width: 100%; padding: 0.875rem 1rem; border: 2px solid #d1d5db;
+            border-radius: 0.5rem; font-size: 1rem; transition: border-color 0.2s ease;
+        }
+
+        .input-group label {
+            position: absolute; top: 50%; left: 1rem; transform: translateY(-50%);
+            color: #6b7280; background-color: white; padding: 0 0.25rem;
+            transition: all 0.2s ease-out; pointer-events: none;
+        }
+
+        .input-group input:focus {
+            outline: none; border-color: #f59e0b;
+        }
+
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: 0; font-size: 0.75rem; color: #d97706;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(245, 158, 11, 0.4);
+        }
+
+        .error-message {
+            background-color: #fef2f2; border-left: 4px solid #ef4444;
+            color: #b91c1c; padding: 1rem; margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="content-card">
+            
+            <!-- COLONNE DROITE : MARKETING & RASSURANCE -->
+            <div class="marketing-column hidden lg:flex">
+                <div>
+                    <h1 class="text-4xl font-black mb-4 text-white benefit-item" style="animation-delay: 0.2s;">
+                        Content de vous revoir.
+                    </h1>
+                    <p class="mb-8 text-gray-300 benefit-item" style="animation-delay: 0.3s;">
+                        Connectez-vous pour consulter vos investissements, suivre vos gains et accéder à votre lien de parrainage.
+                    </p>
+                    
+                    <ul class="space-y-5">
+                        <li class="flex items-start benefit-item" style="animation-delay: 0.4s;">
+                            <svg class="w-7 h-7 text-green-400 mr-4 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div>
+                                <strong class="block text-white">Sécurité Maximale</strong>
+                                <span class="text-gray-400">Votre compte et vos investissements sont protégés par des protocoles de sécurité avancés.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start benefit-item" style="animation-delay: 0.5s;">
+                             <svg class="w-7 h-7 text-green-400 mr-4 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                            <div>
+                                <strong class="block text-white">Suivi en Temps Réel</strong>
+                                <span class="text-gray-400">Accédez à votre tableau de bord complet pour voir la progression de vos gains.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- COLONNE GAUCHE : FORMULAIRE DE CONNEXION -->
+            <div class="form-column">
+                <div class="text-center mb-8">
+                    <a href="/" class="text-2xl font-black text-gray-800 mb-4 inline-block"><span class="text-yellow-500">Gold</span>Invest</a>
+                    <h2 class="text-3xl font-bold text-gray-800">Connectez-vous</h2>
+                    <p class="text-gray-500 mt-2">Heureux de vous revoir !</p>
+                </div>
+                
+                <!-- Votre <form> est 100% conservé, seul le style a été unifié -->
+                <% if (error) { %>
+                    <div class="error-message" role="alert">
+                        <p class="font-bold">Erreur :</p>
+                        <p><%= error %></p>
+                    </div>
+                <% } %>
+                
+                <form action="/login" method="POST">
+                    <div class="input-group">
+                        <input type="email" id="email" name="email" placeholder=" " required>
+                        <label for="email">Adresse e-mail</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="password" name="password" placeholder=" " required>
+                        <label for="password">Mot de passe</label>
+                    </div>
+                    
+                    <button type="submit" class="w-full text-lg font-bold py-3 px-4 rounded-lg submit-btn">
+                        Se Connecter
+                    </button>
+                </form>
+
+                <p class="mt-8 text-center text-sm text-gray-600">
+                    Pas encore de compte ? 
+                    <a href="/register" class="font-bold text-yellow-600 hover:text-yellow-500">
+                        S'inscrire
+                    </a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

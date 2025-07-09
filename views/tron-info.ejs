@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informations TRON - Gold</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
+            <h1 class="text-2xl font-bold text-center mb-6">Informations TRON</h1>
+
+            <div class="space-y-8">
+                <!-- Section Trongrid -->
+                <div>
+                    <h2 class="text-xl font-semibold mb-4">Trongrid</h2>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="mb-4">Trongrid est une API qui nous permet de :</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li>Vérifier les adresses TRON</li>
+                            <li>Voir les transactions</li>
+                            <li>Consulter les soldes</li>
+                            <li>Valider les paiements</li>
+                        </ul>
+                        <div class="mt-4">
+                            <button onclick="testTronAddress()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                                Tester une adresse TRON
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section TronLink -->
+                <div>
+                    <h2 class="text-xl font-semibold mb-4">TronLink</h2>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="mb-4">Trust Wallet est un portefeuille TRON qui permet de :</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li>Créer une nouvelle adresse TRON</li>
+                            <li>Recevoir et envoyer des TRX</li>
+                            <li>Gérer ses fonds</li>
+                            <li>Interagir avec les applications TRON</li>
+                        </ul>
+                        <div class="mt-4">
+                            <p class="text-sm text-gray-600">Trust Wallet est déjà installé sur votre téléphone. Pour obtenir votre adresse TRON :</p>
+                            <ol class="list-decimal list-inside space-y-2 mt-2 text-gray-700">
+                                <li>Ouvrez Trust Wallet</li>
+                                <li>Allez dans "Portefeuille"</li>
+                                <li>Sélectionnez "TRON"</li>
+                                <li>Cliquez sur "Recevoir"</li>
+                                <li>Copiez l'adresse qui commence par "T"</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function testTronAddress() {
+            const address = prompt("Entrez une adresse TRON à tester:");
+            if (address) {
+                try {
+                    const response = await fetch(`/test-tron-address?address=${encodeURIComponent(address)}`);
+                    const data = await response.json();
+                    alert(`Résultat: ${data.message}`);
+                } catch (error) {
+                    alert("Erreur lors du test de l'adresse TRON");
+                }
+            }
+        }
+    </script>
+</body>
+</html>

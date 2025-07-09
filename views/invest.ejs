@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Options d'Investissement - MegaRig</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Votre fichier /styles.css est conservé -->
+    <link rel="stylesheet" href="/styles.css"> 
+    <style>
+        /* Vos styles personnalisés sont conservés. Ils sont déjà bien conçus. */
+        .investment-card {
+            background: #ffffff; border-radius: 1rem; padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            border: 1px solid #e5e7eb; transition: all 0.3s ease;
+        }
+        .investment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .invest-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;
+            padding: 1rem 2rem; border-radius: 0.5rem; font-weight: 600;
+            transition: all 0.3s ease; border: none; cursor: pointer;
+        }
+        .invest-btn:hover {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .btn-back {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: white;
+            padding: 0.75rem 1.5rem; border-radius: 0.5rem; display: flex;
+            align-items: center; gap: 0.5rem; transition: all 0.3s ease;
+            border: none; cursor: pointer;
+        }
+        .btn-back:hover {
+            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+            transform: translateY(-2px);
+        }
+        .price-tag, .return-tag, .duration-tag { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 0.5rem; }
+        .price-tag { font-size: 1.5rem; font-weight: 700; color: #10b981; background: rgba(16, 185, 129, 0.1); }
+        .return-tag { font-size: 1.5rem; font-weight: 700; color: #6366f1; background: rgba(99, 102, 241, 0.1); }
+        .duration-tag { font-size: 1.25rem; font-weight: 600; color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+        
+        /* Vos media queries sont bonnes, mais on peut aussi utiliser directement Tailwind */
+        @media (max-width: 768px) {
+            .investment-card { padding: 1.5rem; }
+            .invest-btn { padding: 0.75rem 1.5rem; }
+        }
+    </style>
+</head>
+<body class="font-inter bg-gray-50 min-h-screen">
+    
+    <!-- HEADER AMÉLIORÉ POUR LE RESPONSIVE -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <button class="btn-back" onclick="goBack()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                <!-- Le texte "Retour" est caché sur les très petits écrans pour gagner de la place -->
+                <span class="hidden sm:inline">Retour</span>
+            </button>
+            <!-- Le titre est plus petit sur mobile et s'agrandit sur les écrans plus larges -->
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900 text-center flex-grow">
+                Options d'Investissement
+            </h1>
+            <!-- Espaceur pour bien centrer le titre, car le bouton retour prend de la place -->
+            <div class="w-20 sm:w-28"></div> 
+        </div>
+    </header>
+
+    <!-- CONTENU PRINCIPAL AMÉLIORÉ POUR LE RESPONSIVE -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Votre grille est déjà bien responsive, on ajoute juste le support pour les écrans `sm` -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            
+            <!-- Les cartes d'investissement restent inchangées, elles sont parfaites -->
+            
+            <!-- MegaRig 1 -->
+            <div class="investment-card">
+                <div class="flex flex-col items-center text-center">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Starter</h2>
+                    <div class="price-tag mb-3">
+                        <span class="text-3xl">5,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <div class="duration-tag mb-4">
+                        <span>31</span>
+                        <span>jours</span>
+                    </div>
+                    <div class="return-tag mb-6">
+                        <span class="text-3xl">25,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <!-- Ajout de `parseInt` pour s'assurer que des nombres sont envoyés -->
+                    <button class="invest-btn w-full" onclick="redirectToPayment('Starter', 5000, 31, 25000)">
+                        Investir maintenant
+                    </button>
+                </div>
+            </div>
+
+            <!-- MegaRig 2 -->
+            <div class="investment-card">
+                <div class="flex flex-col items-center text-center">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Bronze</h2>
+                    <div class="price-tag mb-3">
+                        <span class="text-3xl">15,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <div class="duration-tag mb-4">
+                        <span>31</span>
+                        <span>jours</span>
+                    </div>
+                    <div class="return-tag mb-6">
+                        <span class="text-3xl">75,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <button class="invest-btn w-full" onclick="redirectToPayment('Bronze', 15000, 31, 75000)">
+                        Investir maintenant
+                    </button>
+                </div>
+            </div>
+
+            <!-- MegaRig 2 -->
+            <div class="investment-card">
+                <div class="flex flex-col items-center text-center">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Bronze</h2>
+                    <div class="price-tag mb-3">
+                        <span class="text-3xl">500</span>
+                        <span>FCFA</span>
+                    </div>
+                    <div class="duration-tag mb-4">
+                        <span>31</span>
+                        <span>jours</span>
+                    </div>
+                    <div class="return-tag mb-6">
+                        <span class="text-3xl">2000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <button class="invest-btn w-full" onclick="redirectToPayment('Bronze', 500, 31, 2000)">
+                        Investir maintenant
+                    </button>
+                </div>
+            </div>
+            
+            
+            <!-- MegaRig 3 -->
+            <div class="investment-card">
+                <div class="flex flex-col items-center text-center">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Sylver</h2>
+                    <div class="price-tag mb-3">
+                        <span class="text-3xl">25,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <div class="duration-tag mb-4">
+                        <span>31</span>
+                        <span>jours</span>
+                    </div>
+                    <div class="return-tag mb-6">
+                        <span class="text-3xl">100,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <button class="invest-btn w-full" onclick="redirectToPayment('Sylver', 25000, 31, 100000)">
+                        Investir maintenant
+                    </button>
+                </div>
+            </div>
+
+            <!-- MegaRig 4 -->
+            <div class="investment-card">
+                <div class="flex flex-col items-center text-center">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Gold</h2>
+                    <div class="price-tag mb-3">
+                        <span class="text-3xl">35,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <div class="duration-tag mb-4">
+                        <span>31</span>
+                        <span>jours</span>
+                    </div>
+                    <div class="return-tag mb-6">
+                        <span class="text-3xl">175,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <button class="invest-btn w-full" onclick="redirectToPayment('Gold', 35000, 31, 175000)">
+                        Investir maintenant
+                    </button>
+                </div>
+            </div>
+
+            <!-- MegaRig 5 -->
+            <div class="investment-card">
+                <div class="flex flex-col items-center text-center">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Platinium</h2>
+                    <div class="price-tag mb-3">
+                        <span class="text-3xl">45,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <div class="duration-tag mb-4">
+                        <span>31</span>
+                        <span>jours</span>
+                    </div>
+                    <div class="return-tag mb-6">
+                        <span class="text-3xl">225,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <button class="invest-btn w-full" onclick="redirectToPayment('Platinium', 45000, 31, 1260000)">
+                        Investir maintenant
+                    </button>
+                </div>
+            </div>
+
+            <!-- MegaRig 6 -->
+            <div class="investment-card">
+                <div class="flex flex-col items-center text-center">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Saphirre</h2>
+                    <div class="price-tag mb-3">
+                        <span class="text-3xl">55,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <div class="duration-tag mb-4">
+                        <span>31</span>
+                        <span>jours</span>
+                    </div>
+                    <div class="return-tag mb-6">
+                        <span class="text-3xl">275,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <button class="invest-btn w-full" onclick="redirectToPayment('Saphirre', 55000, 21, 275000)">
+                        Investir maintenant
+                    </button>
+                </div>
+            </div>
+
+            <!-- MegaRig 7 -->
+            <div class="investment-card">
+                <div class="flex flex-col items-center text-center">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Emerald</h2>
+                    <div class="price-tag mb-3">
+                        <span class="text-3xl">65,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <div class="duration-tag mb-4">
+                        <span>31</span>
+                        <span>jours</span>
+                    </div>
+                    <div class="return-tag mb-6">
+                        <span class="text-3xl">325,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <button class="invest-btn w-full" onclick="redirectToPayment('Emerald', 65000, 31, 325000)">
+                        Investir maintenant
+                    </button>
+                </div>
+            </div>
+
+            <!-- MegaRig 8 -->
+            <div class="investment-card">
+                <div class="flex flex-col items-center text-center">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Ruby</h2>
+                    <div class="price-tag mb-3">
+                        <span class="text-3xl">75,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <div class="duration-tag mb-4">
+                        <span>31</span>
+                        <span>jours</span>
+                    </div>
+                    <div class="return-tag mb-6">
+                        <span class="text-3xl">375,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <button class="invest-btn w-full" onclick="redirectToPayment('Ruby', 75000, 31, 375000)">
+                        Investir maintenant
+                    </button>
+                </div>
+            </div>
+
+            <!-- MegaRig 9 -->
+            <div class="investment-card">
+                <div class="flex flex-col items-center text-center">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Diamond</h2>
+                    <div class="price-tag mb-3">
+                        <span class="text-3xl">85,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <div class="duration-tag mb-4">
+                        <span>31</span>
+                        <span>jours</span>
+                    </div>
+                    <div class="return-tag mb-6">
+                        <span class="text-3xl">425,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <button class="invest-btn w-full" onclick="redirectToPayment('Diamond', 85000, 31, 425000)">
+                        Investir maintenant
+                    </button>
+                </div>
+            </div>
+
+            <!-- MegaRig 10 -->
+            <div class="investment-card">
+                <div class="flex flex-col items-center text-center">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Black Diamond</h2>
+                    <div class="price-tag mb-3">
+                        <span class="text-3xl">95,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <div class="duration-tag mb-4">
+                        <span>31</span>
+                        <span>jours</span>
+                    </div>
+                    <div class="return-tag mb-6">
+                        <span class="text-3xl">475,000</span>
+                        <span>FCFA</span>
+                    </div>
+                    <button class="invest-btn w-full" onclick="redirectToPayment('Black Diamond', 95000, 31, 475000)">
+                        Investir maintenant
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- JavaScript - MODIFIÉ POUR LA ROBUSTESSE -->
+    <script>
+        function redirectToPayment(title, price, durationDays, returnAmount) {
+            // On s'assure que durationDays est bien un nombre pour éviter des erreurs plus tard
+            const duration = parseInt(durationDays, 10);
+            
+            // On construit l'URL avec les paramètres encodés pour éviter les caractères spéciaux
+            const paymentUrl = `payment?title=${encodeURIComponent(title)}&price=${encodeURIComponent(price)}&duration=${encodeURIComponent(duration)}&return=${encodeURIComponent(returnAmount)}`;
+            
+            window.location.href = paymentUrl;
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+    
+    <!-- Footer CORRIGÉ POUR RESPONSIVE -->
+    <footer class="bg-gray-900 text-white mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center md:text-left">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">GoldInvest</h3>
+                    <p class="text-gray-400">2024 - Tous droits réservés</p>
+                </div>
+                <div class="flex flex-col space-y-4 items-center md:items-start">
+                    <a href="/" class="hover:text-yellow-400 transition-colors duration-300">Accueil</a>
+                    <a href="/about" class="hover:text-yellow-400 transition-colors duration-300">À propos</a>
+                    <a href="/contact" class="hover:text-yellow-400 transition-colors duration-300">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

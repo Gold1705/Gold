@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Paiement via Trust Wallet (TRX)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center px-4">
+  <div class="bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-8 flex flex-col items-center">
+    <div class="w-full flex items-center mb-6">
+      <button onclick="goBack()" class="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg flex items-center transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Retour
+      </button>
+    </div>
+
+    <div class="w-full flex items-center mb-6">
+    <button onclick="cancelInvestment()" id="cancel-btn" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg flex items-center transition-colors text-sm">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+    Annuler
+    </button>
+    </div>
+
+    <h1 class="text-3xl font-bold text-yellow-400 mb-6 text-center w-full">Confirmation de Paiement</h1>
+
+    <div id="payment-details" class="w-full flex flex-col items-center bg-gray-900 rounded-xl p-6 shadow mb-6">
+      <p class="text-yellow-400 text-center">Cliquez sur "Confirmer le Paiement" pour afficher les détails et commencer.</p>
+    </div>
+
+    <button id="confirm-btn" class="bg-yellow-400 hover:bg-yellow-300 text-black py-3 px-6 rounded-lg w-full text-lg font-semibold transition-transform transform hover:scale-105">
+      Confirmer le Paiement
+    </button>
+  </div>
+
+<script>
+    // Votre code initial est parfait et conservé
+    const urlParams = new URLSearchParams(window.location.search);
+    const title = urlParams.get('title') || 'Investissement';
+    const priceFCF = parseFloat(urlParams.get('price'));
+    const returnAmount = parseFloat(urlParams.get('return'));
+    const walletAddress = '<%= walletAddress %>';
+    const investmentId = '<%= investmentId %>'; // Cette variable est correctement définie
+     
+
+    const confirmBtn = document.getElementById('confirm-btn');
+    const paymentDetailsDiv = document.getElementById('payment-details');
+    let pollingInterval = null;
+
+    // Votre fonction initializePayment est parfaite et conservée
+    async function initializePayment() {
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Calcul du montant TRX...';
+
+        try {
+            const response = await fetch('/api/trx-rate');
+            if (!response.ok) throw new Error('Impossible de récupérer le taux de change.');
+            const data = await response.json();
+            const trxRate = data.rate;
+
+            if (!trxRate || isNaN(priceFCF)) throw new Error('Données de prix ou de taux invalides.');
+
+            const trxAmount = (priceFCF / trxRate).toFixed(6);
+
+            paymentDetailsDiv.innerHTML = `
+                <h2 class="text-xl font-bold text-yellow-300 mb-4">${title}</h2>
+                <div class="w-full space-y-3">
+                  <div class="flex justify-between text-gray-300 text-base"><span>Montant:</span><span class="font-semibold">${priceFCF.toLocaleString('fr-FR')} FCFA</span></div>
+                  <div class="flex justify-between text-gray-300 text-base"><span>Équivalent:</span><span class="font-semibold text-yellow-400">${trxAmount} TRX</span></div>
+                  <div class="flex justify-between text-gray-300 text-base pt-2 border-t border-gray-700"><span>Retour Attendu:</span><span class="font-semibold">${returnAmount.toLocaleString('fr-FR')} FCFA</span></div>
+                  <div class="mt-6 text-center">
+                    <span class="block text-gray-300 mb-1">Scannez pour payer avec votre wallet:</span>
+                    <div class="bg-gray-700 px-4 py-2 rounded break-words text-sm font-mono text-white select-all my-2">${walletAddress}</div>
+                    <canvas id="qr" class="mx-auto mt-4 rounded-lg"></canvas>
+                  </div>
+                </div>`;
+            
+            new QRious({ element: document.getElementById('qr'), value: walletAddress, size: 160, background: 'white', foreground: 'black' });
+            
+            confirmBtn.textContent = 'En attente de votre paiement...';
+            startPaymentCheck(trxAmount);
+
+        } catch (error) {
+            console.error('Erreur d\'initialisation du paiement:', error);
+            paymentDetailsDiv.innerHTML = `<p class="text-red-400 text-center">Erreur: ${error.message}<br>Veuillez rafraîchir la page.</p>`;
+            confirmBtn.textContent = 'Erreur - Rafraîchir';
+            confirmBtn.disabled = false;
+            confirmBtn.onclick = () => location.reload();
+        }
+    }
+
+        // === NOUVELLE FONCTION POUR ANNULER ===
+    async function cancelInvestment() {
+        if (!confirm("Êtes-vous sûr de vouloir annuler cet investissement ? Cette action est irréversible.")) {
+            return; // L'utilisateur a cliqué sur "Non"
+        }
+
+        const cancelButton = document.getElementById('cancel-btn');
+        cancelButton.disabled = true;
+        cancelButton.innerHTML = 'Annulation...';
+
+        try {
+            const response = await fetch('/cancel-investment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ investmentId: investmentId }) // On envoie l'ID de l'investissement
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Si l'annulation a réussi, on redirige vers la page d'investissement
+                window.location.href = '/invest'; 
+            } else {
+                // S'il y a une erreur, on l'affiche et on réactive le bouton
+                alert('Erreur lors de l\'annulation : ' + (data.error || 'Erreur inconnue'));
+                cancelButton.disabled = false;
+                cancelButton.innerHTML = 'Annuler';
+            }
+
+        } catch (error) {
+            console.error('Erreur réseau lors de l\'annulation :', error);
+            alert('Une erreur réseau est survenue. Veuillez réessayer.');
+            cancelButton.disabled = false;
+            cancelButton.innerHTML = 'Annuler';
+        }
+    }
+
+
+    // Votre fonction startPaymentCheck est parfaite, sauf une ligne
+    function startPaymentCheck(expectedAmount) {
+        if (pollingInterval) clearInterval(pollingInterval);
+
+        const check = async () => {
+            try {
+                // --- LA SEULE CORRECTION NÉCESSAIRE EST ICI ---
+                // On utilise la variable `investmentId` qui est déjà définie plus haut dans le script.
+                const checkUrl = `/check-payment?expectedAmount=${encodeURIComponent(expectedAmount)}&investmentId=${encodeURIComponent(investmentId)}`;
+                const response = await fetch(checkUrl);
+                const data = await response.json();
+                if (data.paid) {
+                    clearInterval(pollingInterval);
+                    // Nouvelle ligne améliorée
+                  window.location.href = `/confirmation?investmentId=${investmentId}`;
+                }
+            } catch (err) {
+                console.error("Erreur de vérification:", err);
+            }
+        };
+        check();
+        pollingInterval = setInterval(check, 5000); 
+    }
+
+    // Votre écouteur d'événement est parfait et conservé
+    confirmBtn.addEventListener('click', initializePayment);
+
+    // Votre fonction goBack est parfaite et conservée
+    function goBack() { window.history.back(); }
+</script>
+</body>
+</html>

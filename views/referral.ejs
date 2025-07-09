@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gagnez de l'Argent en Parrainant - GoldInvest</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #111827; color: #f9fafb; scroll-behavior: smooth; }
+        .hero-bg { background: radial-gradient(circle at 50% 0%, rgba(251, 191, 36, 0.1), transparent 50%), #111827; }
+        .cta-button { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(251, 191, 36, 0.3); }
+        .cta-button:hover { transform: translateY(-4px) scale(1.05); box-shadow: 0 8px 25px rgba(251, 191, 36, 0.5); }
+        .card { background: rgba(31, 41, 55, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .step-number { font-family: 'Inter', sans-serif; font-weight: 900; color: rgba(251, 191, 36, 0.15); -webkit-text-stroke: 1px rgba(251, 191, 36, 0.5); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        .social-proof-toast { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 50; animation: slideInAndOut 5s ease-in-out forwards; }
+        @keyframes slideInAndOut { 0% { transform: translateY(150%); opacity: 0; } 15% { transform: translateY(0); opacity: 1; } 85% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(150%); opacity: 0; } }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Section Héros -->
+    <section class="hero-bg text-white py-24 md:py-32 px-4 relative overflow-hidden">
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight fade-in" style="animation-delay: 0.2s;">Gagnez 1000 FCFA. À chaque fois.</h1>
+            <p class="text-lg md:text-xl text-yellow-300 mb-10 max-w-3xl mx-auto fade-in" style="animation-delay: 0.4s;">
+                Devenez partenaire de GoldInvest. Partagez votre lien unique et recevez des récompenses en argent réel, retirables en TRX, pour chaque nouvel investisseur que vous nous présentez.
+            </p>
+            <% if (username) { %>
+                <a href="#" class="cta-button js-go-to-profile text-white font-bold py-4 px-12 rounded-full text-lg fade-in" style="animation-delay: 0.6s;">Obtenir mon lien maintenant</a>
+            <% } else { %>
+                <a href="/register" class="cta-button text-white font-bold py-4 px-12 rounded-full text-lg fade-in" style="animation-delay: 0.6s;">Obtenir mon lien maintenant</a>
+            <% } %>
+        </div>
+    </section>
+
+    <!-- Section "Comment ça marche ?" -->
+    <section id="how-it-works" class="py-20 md:py-28 bg-[#111827]">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-white">Votre Empire en 3 Étapes Simples</h2>
+                <p class="text-gray-400 mt-4">Le chemin le plus rapide entre le partage et votre portefeuille.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="card p-8 rounded-2xl">
+                    <div class="relative"><p class="step-number text-9xl">1</p></div>
+                    <div class="relative -mt-10"><div class="flex items-center justify-center h-16 w-16 mx-auto bg-yellow-500 text-white rounded-xl shadow-lg mb-6"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg></div><h3 class="text-2xl font-bold mb-3 text-white">Partagez Votre Lien</h3><p class="text-gray-400">Obtenez votre lien de parrainage personnel dans votre profil. Un seul clic suffit pour le copier.</p></div>
+                </div>
+                <div class="card p-8 rounded-2xl md:scale-105 md:shadow-2xl">
+                    <div class="relative"><p class="step-number text-9xl">2</p></div>
+                    <div class="relative -mt-10"><div class="flex items-center justify-center h-16 w-16 mx-auto bg-green-500 text-white rounded-xl shadow-lg mb-6"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg></div><h3 class="text-2xl font-bold mb-3 text-white">Votre Filleul Investit</h3><p class="text-gray-400">Quand votre ami s'inscrit et que son premier investissement est validé, notre système le détecte automatiquement.</p></div>
+                </div>
+                <div class="card p-8 rounded-2xl">
+                    <div class="relative"><p class="step-number text-9xl">3</p></div>
+                    <div class="relative -mt-10"><div class="flex items-center justify-center h-16 w-16 mx-auto bg-blue-500 text-white rounded-xl shadow-lg mb-6"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01M12 6v-1m0-1V4m0 2.01V8m0 0h.01M12 15h.01M12 17h.01M9 17h.01M15 17h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div><h3 class="text-2xl font-bold mb-3 text-white">Vous Êtes Payé</h3><p class="text-gray-400">1000 FCFA. Instantanément. Directement sur votre solde. Sans poser de questions. C'est votre argent.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Final -->
+    <section class="py-20 md:py-28 hero-bg">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <% if (username) { %>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Prêt à commencer, <%= username %> ?</h2>
+                <p class="text-yellow-300 mb-8">Votre code de parrainage vous attend dans votre profil. Commencez à partager maintenant !</p>
+                <a href="#" class="cta-button js-go-to-profile text-white font-bold py-4 px-10 rounded-full text-xl inline-block">Obtenir Mon Lien de Parrainage</a>
+            <% } else { %>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Ne laissez pas l'argent sur la table.</h2>
+                <p class="text-yellow-300 mb-8">Créez votre compte en 60 secondes chrono et obtenez votre lien pour commencer à gagner.</p>
+                <a href="/register" class="cta-button text-white font-bold py-4 px-10 rounded-full text-xl inline-block">Créer mon compte (Gratuit)</a>
+            <% } %>
+        </div>
+    </section>
+
+    <!-- Conteneur pour la preuve sociale -->
+    <div id="social-proof-container"></div>
+    
+    <script>
+        // --- SCRIPT UNIFIÉ ET CORRIGÉ ---
+        document.querySelectorAll('.js-go-to-profile').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.setItem('openProfileModal', 'true');
+                window.location.href = '/';
+            });
+        });
+        
+        let recentBonuses = [];
+        try {
+            recentBonuses = JSON.parse('<%- JSON.stringify(recentBonuses || []) %>');
+        } catch (e) {
+            console.error("Erreur d'analyse des données de parrainage.", e);
+        }
+        const container = document.getElementById('social-proof-container');
+        function createToast(bonus, index) {
+            setTimeout(() => {
+                const toast = document.createElement('div');
+                toast.className = 'social-proof-toast flex items-center bg-gray-800 text-white p-4 rounded-lg shadow-2xl border border-yellow-500/30 w-80';
+                const nameParts = bonus.username.split(' ');
+                const displayName = nameParts.length > 1 ? `${nameParts[0]} ${nameParts[1].charAt(0)}.` : bonus.username;
+                const timeAgo = Math.round((new Date() - new Date(bonus.created_at)) / (1000 * 60));
+                const timeDisplay = timeAgo < 1 ? "à l'instant" : `il y a ${timeAgo} min`;
+                toast.innerHTML = `<div class="flex-shrink-0 bg-green-500 h-10 w-10 rounded-full flex items-center justify-center mr-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01M12 6v-1m0-1V4m0 2.01V8m0 0h.01M12 15h.01M12 17h.01M9 17h.01M15 17h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div><div><p class="font-semibold">${displayName} vient de recevoir 1000 FCFA !</p><p class="text-sm text-gray-400">${timeDisplay}</p></div>`;
+                container.appendChild(toast);
+                setTimeout(() => toast.remove(), 4800);
+            }, index * 7000);
+        }
+        if (Array.isArray(recentBonuses) && recentBonuses.length > 0) {
+            recentBonuses.forEach(createToast);
+        }
+    </script>
+</body>
+</html>

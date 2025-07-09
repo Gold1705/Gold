@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mise à jour du profil - Gold</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
+            <h1 class="text-2xl font-bold text-center mb-6">Mise à jour du profil</h1>
+            
+            <% if (error) { %>
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <form action="/update-profile" method="POST" class="space-y-6">
+                <!-- Section Trust Wallet -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h2 class="text-lg font-semibold mb-4">Configuration Trust Wallet</h2>
+                    <ol class="list-decimal list-inside space-y-2 mb-4">
+                        <li>Ouvrez Trust Wallet sur votre téléphone</li>
+                        <li>Allez dans "Portefeuille"</li>
+                        <li>Sélectionnez "TRON"</li>
+                        <li>Cliquez sur "Recevoir"</li>
+                        <li>Copiez l'adresse qui commence par "T"</li>
+                    </ol>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label for="wallet_address" class="block text-sm font-medium text-gray-700 mb-1">
+                                Adresse Trust Wallet (TRON)
+                            </label>
+                            <input type="text" id="wallet_address" name="wallet_address" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                                   placeholder="Exemple: T123456789..." required>
+                            <p class="mt-1 text-sm text-gray-500">
+                                Copiez l'adresse depuis l'onglet "Recevoir" dans Trust Wallet
+                            </p>
+                        </div>
+
+                        <div>
+                            <label for="wallet_qr" class="block text-sm font-medium text-gray-700 mb-1">
+                                QR Code de votre Trust Wallet
+                            </label>
+                            <input type="file" id="wallet_qr" name="wallet_qr" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                                   accept=".png,.jpg,.jpeg">
+                            <p class="mt-1 text-sm text-gray-500">
+                                Optionnel : Ajoutez un QR code pour faciliter les paiements
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Informations personnelles -->
+                <div class="space-y-4">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">
+                            Nom d'utilisateur
+                        </label>
+                        <input type="text" id="username" name="username" value="<%= username %>"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                               required>
+                    </div>
+
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+                            Email
+                        </label>
+                        <input type="email" id="email" name="email" value="<%= email %>"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                               required>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                        Mettre à jour le profil
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
