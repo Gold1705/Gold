@@ -22,6 +22,8 @@ const upload = multer({ storage, limits: { fileSize: 5000000 }, fileFilter: (req
 if (!fs.existsSync('public/uploads')) fs.mkdirSync('public/uploads', { recursive: true });
 
 const app = express();
+const TRON_ADDRESS = process.env.TRON_ADDRESS ;
+const TRON_API_KEY = process.env.TRON_API_KEY ;
 
 
 function generateReferralCode(length = 8) {
