@@ -390,7 +390,7 @@ async function getTrxRate() {
             return cachedTrxRateInfo.rate;
         }
 
-        const fallbackRate = 80; // Un taux de secours raisonnable pour 1 USD = X FCFA -> 1 TRX = Y FCFA
+        const fallbackRate = 165; // Un taux de secours raisonnable pour 1 USD = X FCFA -> 1 TRX = Y FCFA
         console.warn(chalk.bgRed.white.bold(`[TAUX DEBUG] FATAL : L'API a échoué et aucun cache n'existe. Utilisation du taux de secours fixe : ${fallbackRate}`));
         return fallbackRate;
     }
